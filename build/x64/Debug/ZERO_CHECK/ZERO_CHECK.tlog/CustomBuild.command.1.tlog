@@ -1,0 +1,10 @@
+^C:\USERS\MATTH\DOCUMENTS\GITHUB\COMPGEO_FINAL\BUILD\CMAKEFILES\547937F456961215339FF28E46C2FFEA\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/matth/Documents/GitHub/CompGeo_Final -BC:/Users/matth/Documents/GitHub/CompGeo_Final/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/matth/Documents/GitHub/CompGeo_Final/build/HW1.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

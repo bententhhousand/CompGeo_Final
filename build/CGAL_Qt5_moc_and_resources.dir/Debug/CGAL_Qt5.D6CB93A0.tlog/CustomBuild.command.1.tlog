@@ -1,0 +1,60 @@
+^C:\USERS\MATTH\DOCUMENTS\COMPGEO\VCPKG\INSTALLED\X64-WINDOWS\INCLUDE\CGAL\QT\IMAGEINTERFACE.UI
+setlocal
+C:\Users\matth\Documents\CompGeo\vcpkg\installed\x64-windows\tools\qt5\bin\uic.exe -o C:/Users/matth/Documents/GitHub/CompGeo_Final/build/ui_ImageInterface.h C:/Users/matth/Documents/CompGeo/vcpkg/installed/x64-windows/include/CGAL/Qt/ImageInterface.ui
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\MATTH\DOCUMENTS\GITHUB\COMPGEO_FINAL\BUILD\RESOURCES\CGAL.QRC
+setlocal
+C:\Users\matth\Documents\CompGeo\vcpkg\installed\x64-windows\tools\qt5\bin\rcc.exe --name CGAL --output C:/Users/matth/Documents/GitHub/CompGeo_Final/build/qrc_CGAL.cpp C:/Users/matth/Documents/GitHub/CompGeo_Final/build/resources/CGAL.qrc
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\MATTH\DOCUMENTS\GITHUB\COMPGEO_FINAL\BUILD\ICONS\INPUT.QRC
+setlocal
+C:\Users\matth\Documents\CompGeo\vcpkg\installed\x64-windows\tools\qt5\bin\rcc.exe --name Input --output C:/Users/matth/Documents/GitHub/CompGeo_Final/build/qrc_Input.cpp C:/Users/matth/Documents/GitHub/CompGeo_Final/build/icons/Input.qrc
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\MATTH\DOCUMENTS\GITHUB\COMPGEO_FINAL\BUILD\ICONS\FILE.QRC
+setlocal
+C:\Users\matth\Documents\CompGeo\vcpkg\installed\x64-windows\tools\qt5\bin\rcc.exe --name File --output C:/Users/matth/Documents/GitHub/CompGeo_Final/build/qrc_File.cpp C:/Users/matth/Documents/GitHub/CompGeo_Final/build/icons/File.qrc
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\MATTH\DOCUMENTS\GITHUB\COMPGEO_FINAL\BUILD\ICONS\TRIANGULATION_2.QRC
+setlocal
+C:\Users\matth\Documents\CompGeo\vcpkg\installed\x64-windows\tools\qt5\bin\rcc.exe --name Triangulation_2 --output C:/Users/matth/Documents/GitHub/CompGeo_Final/build/qrc_Triangulation_2.cpp C:/Users/matth/Documents/GitHub/CompGeo_Final/build/icons/Triangulation_2.qrc
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\MATTH\DOCUMENTS\GITHUB\COMPGEO_FINAL\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/matth/Documents/GitHub/CompGeo_Final -BC:/Users/matth/Documents/GitHub/CompGeo_Final/build --check-stamp-file C:/Users/matth/Documents/GitHub/CompGeo_Final/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

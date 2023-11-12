@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\matth\Documents\GitHub\CompGeo_Final\build\CGAL_Qt5_moc_and_resources_autogen\mocs_compilation_Debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\matth\Documents\GitHub\CompGeo_Final\build\qrc_CGAL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\matth\Documents\GitHub\CompGeo_Final\build\qrc_Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\matth\Documents\GitHub\CompGeo_Final\build\qrc_File.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\matth\Documents\GitHub\CompGeo_Final\build\qrc_Triangulation_2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\matth\Documents\GitHub\CompGeo_Final\build\CGAL_Qt5_moc_and_resources_autogen\mocs_compilation_Release.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\matth\Documents\GitHub\CompGeo_Final\build\CGAL_Qt5_moc_and_resources_autogen\mocs_compilation_MinSizeRel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\matth\Documents\GitHub\CompGeo_Final\build\CGAL_Qt5_moc_and_resources_autogen\mocs_compilation_RelWithDebInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\matth\Documents\CompGeo\vcpkg\installed\x64-windows\include\CGAL\Qt\GraphicsViewNavigation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\matth\Documents\CompGeo\vcpkg\installed\x64-windows\include\CGAL\Qt\DemosMainWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\matth\Documents\CompGeo\vcpkg\installed\x64-windows\include\CGAL\Qt\GraphicsItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\matth\Documents\CompGeo\vcpkg\installed\x64-windows\include\CGAL\Qt\GraphicsViewInput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\matth\Documents\CompGeo\vcpkg\installed\x64-windows\include\CGAL\Qt\camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\matth\Documents\CompGeo\vcpkg\installed\x64-windows\include\CGAL\Qt\frame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\matth\Documents\CompGeo\vcpkg\installed\x64-windows\include\CGAL\Qt\keyFrameInterpolator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\matth\Documents\CompGeo\vcpkg\installed\x64-windows\include\CGAL\Qt\manipulatedCameraFrame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\matth\Documents\CompGeo\vcpkg\installed\x64-windows\include\CGAL\Qt\manipulatedFrame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\matth\Documents\CompGeo\vcpkg\installed\x64-windows\include\CGAL\Qt\qglviewer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\matth\Documents\CompGeo\vcpkg\installed\x64-windows\include\CGAL\Qt\image_interface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\matth\Documents\GitHub\CompGeo_Final\build\ui_ImageInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\matth\Documents\CompGeo\vcpkg\installed\x64-windows\include\CGAL\Qt\ImageInterface.ui" />
+    <CustomBuild Include="C:\Users\matth\Documents\GitHub\CompGeo_Final\build\resources\CGAL.qrc" />
+    <CustomBuild Include="C:\Users\matth\Documents\GitHub\CompGeo_Final\build\icons\Input.qrc" />
+    <CustomBuild Include="C:\Users\matth\Documents\GitHub\CompGeo_Final\build\icons\File.qrc" />
+    <CustomBuild Include="C:\Users\matth\Documents\GitHub\CompGeo_Final\build\icons\Triangulation_2.qrc" />
+    <CustomBuild Include="C:\Users\matth\Documents\GitHub\CompGeo_Final\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{D5F78C1C-D879-3012-B366-BFD1C37A7854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{78ABF5AB-6ADB-3F21-A2AD-7E85EE169C3F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
