@@ -62,7 +62,46 @@ void add_square_to_mesh(Mesh &mesh, double xmin, double xmax, double ymin, doubl
     Vertex_descriptor v3 = mesh.add_vertex(p3);
     Vertex_descriptor v4 = mesh.add_vertex(p4);
 
-    mesh.add_face(v1, v2, v3, v4);
+    mesh.add_edge(v1, v2);
+    mesh.add_edge(v2, v3);
+    mesh.add_edge(v3, v4);
+    mesh.add_edge(v4, v1);
+}
+
+void add_cube_to_mesh(Mesh &mesh, double xmin, double xmax, double ymin, double ymax, double zmin, double zmax) {
+    Point_3 p1(xmin, ymin, zmin);
+    Point_3 p2(xmax, ymin, zmin);
+    Point_3 p3(xmin, ymax, zmin);
+    Point_3 p4(xmax, ymax, zmin);
+    Point_3 p5(xmin, ymin, zmax);
+    Point_3 p6(xmax, ymin, zmax);
+    Point_3 p7(xmin, ymax, zmax);
+    Point_3 p8(xmax, ymax, zmax);
+
+    Vertex_descriptor v1 = mesh.add_vertex(p1);
+    Vertex_descriptor v2 = mesh.add_vertex(p2);
+    Vertex_descriptor v3 = mesh.add_vertex(p3);
+    Vertex_descriptor v4 = mesh.add_vertex(p4);
+    Vertex_descriptor v5 = mesh.add_vertex(p5);
+    Vertex_descriptor v6 = mesh.add_vertex(p6);
+    Vertex_descriptor v7 = mesh.add_vertex(p7);
+    Vertex_descriptor v8 = mesh.add_vertex(p8);
+
+    mesh.add_edge(v1, v2);
+    mesh.add_edge(v2, v4);
+    mesh.add_edge(v4, v3);
+    mesh.add_edge(v3, v1);
+
+    mesh.add_edge(v5, v6);
+    mesh.add_edge(v6, v8);
+    mesh.add_edge(v8, v7);
+    mesh.add_edge(v7, v5);
+
+    mesh.add_edge(v1, v5);
+    mesh.add_edge(v2, v6);
+    mesh.add_edge(v3, v7);
+    mesh.add_edge(v4, v8);
+
 }
 
 int main(int argc, char* argv[]){ // cmake -G"Visual Studio 16" -A x64 -DCMAKE_TOOLCHAIN_FILE=C:/Users/matth/Documents/CompGeo/vcpkg/scripts/buildsystems/vcpkg.cmake ..
@@ -99,7 +138,7 @@ int main(int argc, char* argv[]){ // cmake -G"Visual Studio 16" -A x64 -DCMAKE_T
 	CGAL::draw(inputMesh);
 
     Octree octree(points, points.point_map());
-    octree.refine();
+    octree.refine(100000, 1);
     typedef std::array<std::size_t, 3> Facet;
     std::vector<Facet> facets;
     CGAL::advancing_front_surface_reconstruction(points.points().begin(),
@@ -117,8 +156,8 @@ int main(int argc, char* argv[]){ // cmake -G"Visual Studio 16" -A x64 -DCMAKE_T
     
     for (Octree::Node node : octree.traverse<Preorder_traversal>()) {
         Bbox nodeBox = octree.bbox(node);
-        //printBbox(nodeBox);
-        add_square_to_mesh(inputMesh, nodeBox.xmin(), nodeBox.xmax(), nodeBox.ymin(), nodeBox.ymax());
+        //add_square_to_mesh(inputMesh, nodeBox.xmin(), nodeBox.xmax(), nodeBox.ymin(), nodeBox.ymax());
+        add_cube_to_mesh(inputMesh, nodeBox.xmin(), nodeBox.xmax(), nodeBox.ymin(), nodeBox.ymax(), nodeBox.zmin(), nodeBox.zmax());
         //std::cout << node << "\n" << std::endl;
     }
     CGAL::draw(inputMesh);
