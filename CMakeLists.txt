@@ -17,4 +17,5 @@ endforeach()
 
 if(CGAL_Qt5_FOUND)
   target_link_libraries(simplification PUBLIC CGAL::CGAL_Basic_viewer)
+  target_link_libraries(octreeTraverse PUBLIC CGAL::CGAL_Basic_viewer)
 endif()

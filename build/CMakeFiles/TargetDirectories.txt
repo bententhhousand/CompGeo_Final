@@ -1,8 +1,9 @@
 C:/Users/matth/Documents/GitHub/CompGeo_Final/build/CMakeFiles/CGAL_Qt5_moc_and_resources.dir
-C:/Users/matth/Documents/GitHub/CompGeo_Final/build/CMakeFiles/simplification.dir
+C:/Users/matth/Documents/GitHub/CompGeo_Final/build/CMakeFiles/octreeTraverse.dir
 C:/Users/matth/Documents/GitHub/CompGeo_Final/build/CMakeFiles/compilation_of__HW1.dir
 C:/Users/matth/Documents/GitHub/CompGeo_Final/build/CMakeFiles/ALL_CGAL_TARGETS.dir
 C:/Users/matth/Documents/GitHub/CompGeo_Final/build/CMakeFiles/cgal_check_build_system.dir
 C:/Users/matth/Documents/GitHub/CompGeo_Final/build/CMakeFiles/compilation_of__CGAL_Qt5_moc_and_resources.dir
+C:/Users/matth/Documents/GitHub/CompGeo_Final/build/CMakeFiles/simplification.dir
 C:/Users/matth/Documents/GitHub/CompGeo_Final/build/CMakeFiles/ALL_BUILD.dir
 C:/Users/matth/Documents/GitHub/CompGeo_Final/build/CMakeFiles/ZERO_CHECK.dir

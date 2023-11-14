@@ -15,17 +15,55 @@
 #include <CGAL/Polygon_mesh_processing/polygon_soup_to_polygon_mesh.h>
 #include <CGAL/draw_point_set_3.h>
 #include <CGAL/draw_surface_mesh.h>
+#include <CGAL/Kd_tree.h>
+#include <CGAL/Search_traits_d.h>
+#include <CGAL/Octree.h>
+#include <CGAL/Bbox_3.h>
 
 #include <cstdlib>
 #include <vector>
 #include <fstream>
 
-typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
-typedef Kernel::FT                                          FT;
-typedef Kernel::Point_3                                     Point_3;
-typedef Kernel::Vector_3                                    Vector_3;
-typedef Kernel::Sphere_3                                    Sphere_3;
-typedef CGAL::Point_set_3<Point_3, Vector_3>                Point_set;
+typedef CGAL::Exact_predicates_inexact_constructions_kernel 	Kernel;
+typedef Kernel::FT                                          	FT;
+typedef Kernel::Point_3                                     	Point_3;
+typedef Kernel::Vector_3                                    	Vector_3;
+typedef Kernel::Sphere_3                                    	Sphere_3;
+typedef CGAL::Point_set_3<Point_3, Vector_3>                	Point_set;
+typedef Point_set::Point_map                                    Point_map;
+typedef CGAL::Search_traits_3<Kernel>                          	Traits;
+typedef CGAL::Kd_tree<Traits> 									kTree;
+typedef std::vector<Point_3> 									Point_vector;
+typedef CGAL::Octree<Kernel, Point_set, Point_map>              Octree;
+typedef CGAL::Bbox_3                                            Bbox;
+typedef CGAL::Surface_mesh<Point_3>                             Mesh;
+typedef Mesh::Vertex_index                                      Vertex_descriptor;
+typedef CGAL::Orthtrees::Preorder_traversal                     Preorder_traversal;
+
+void printBbox(Bbox& inputBox){
+    
+    std::cout << "X-Min:" << inputBox.xmin() << std::endl;
+    std::cout << "X-Max:" << inputBox.xmax() << std::endl;
+    std::cout << "Y-Min:" << inputBox.ymin() << std::endl;
+    std::cout << "Y-Max:" << inputBox.ymax() << std::endl;
+    std::cout << "Z-Min:" << inputBox.zmin() << std::endl;
+    std::cout << "Z-Max:" << inputBox.zmax() << std::endl;
+
+}
+
+void add_square_to_mesh(Mesh &mesh, double xmin, double xmax, double ymin, double ymax) {
+    Point_3 p1(xmin, ymin, 0);
+    Point_3 p2(xmax, ymin, 0);
+    Point_3 p3(xmax, ymax, 0);
+    Point_3 p4(xmin, ymax, 0);
+
+    Vertex_descriptor v1 = mesh.add_vertex(p1);
+    Vertex_descriptor v2 = mesh.add_vertex(p2);
+    Vertex_descriptor v3 = mesh.add_vertex(p3);
+    Vertex_descriptor v4 = mesh.add_vertex(p4);
+
+    mesh.add_face(v1, v2, v3, v4);
+}
 
 int main(int argc, char* argv[]){ // cmake -G"Visual Studio 16" -A x64 -DCMAKE_TOOLCHAIN_FILE=C:/Users/matth/Documents/CompGeo/vcpkg/scripts/buildsystems/vcpkg.cmake ..
     // cmake --build .
@@ -49,8 +87,19 @@ int main(int argc, char* argv[]){ // cmake -G"Visual Studio 16" -A x64 -DCMAKE_T
     if (points.empty())
         return EXIT_FAILURE;
 
-    CGAL::draw(points);
 
+	kTree ktree;
+	Point_vector pv;
+    Mesh inputMesh;
+
+	for (Point_3 p : points.points()){
+        inputMesh.add_vertex(p);
+	}
+
+	CGAL::draw(inputMesh);
+
+    Octree octree(points, points.point_map());
+    octree.refine();
     typedef std::array<std::size_t, 3> Facet;
     std::vector<Facet> facets;
     CGAL::advancing_front_surface_reconstruction(points.points().begin(),
@@ -62,7 +111,15 @@ int main(int argc, char* argv[]){ // cmake -G"Visual Studio 16" -A x64 -DCMAKE_T
     std::vector<Point_3> vertices;
     vertices.reserve (points.size());
     std::copy (points.points().begin(), points.points().end(), std::back_inserter (vertices));
-    CGAL::Surface_mesh<Point_3> output_mesh;
+    Mesh output_mesh;
     CGAL::Polygon_mesh_processing::polygon_soup_to_polygon_mesh (vertices, facets, output_mesh);
     CGAL::draw(output_mesh);
+    
+    for (Octree::Node node : octree.traverse<Preorder_traversal>()) {
+        Bbox nodeBox = octree.bbox(node);
+        //printBbox(nodeBox);
+        add_square_to_mesh(inputMesh, nodeBox.xmin(), nodeBox.xmax(), nodeBox.ymin(), nodeBox.ymax());
+        //std::cout << node << "\n" << std::endl;
+    }
+    CGAL::draw(inputMesh);
 }
