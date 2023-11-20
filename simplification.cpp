@@ -16,13 +16,17 @@
 #include <CGAL/draw_point_set_3.h>
 #include <CGAL/draw_surface_mesh.h>
 #include <CGAL/Kd_tree.h>
+#include <CGAL/Kd_tree_node.h>
+#include <CGAL/Kd_tree_rectangle.h>
 #include <CGAL/Search_traits_d.h>
 #include <CGAL/Octree.h>
 #include <CGAL/Bbox_3.h>
+#include <CGAL/point_generators_3.h>
 
 #include <cstdlib>
 #include <vector>
 #include <fstream>
+#include <math.h>
 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel 	Kernel;
 typedef Kernel::FT                                          	FT;
@@ -32,13 +36,56 @@ typedef Kernel::Sphere_3                                    	Sphere_3;
 typedef CGAL::Point_set_3<Point_3, Vector_3>                	Point_set;
 typedef Point_set::Point_map                                    Point_map;
 typedef CGAL::Search_traits_3<Kernel>                          	Traits;
-typedef CGAL::Kd_tree<Traits> 									kTree;
+typedef CGAL::Kd_tree<Traits> 									Kd_Tree;
+typedef Kd_Tree::Node                                           Node;
+typedef Kd_Tree::Internal_node                                  Internal_node;
+typedef Kd_Tree::Leaf_node                                      Leaf_node;
+typedef Kd_Tree::Node_handle                                    Node_handle;
+typedef CGAL::Fair<Traits>                                      Fair;
+typedef CGAL::Kd_tree_rectangle<FT, CGAL::Dimension_tag<3>>     Kd_tree_rectangle;
 typedef std::vector<Point_3> 									Point_vector;
 typedef CGAL::Octree<Kernel, Point_set, Point_map>              Octree;
 typedef CGAL::Bbox_3                                            Bbox;
 typedef CGAL::Surface_mesh<Point_3>                             Mesh;
 typedef Mesh::Vertex_index                                      Vertex_descriptor;
 typedef CGAL::Orthtrees::Preorder_traversal                     Preorder_traversal;
+
+
+void print_kd_bounds(const Kd_tree_rectangle& rect) {
+    // Get the bounds for each dimension
+    FT xmin = rect.min_coord(0);
+    FT xmax = rect.max_coord(0);
+    FT ymin = rect.min_coord(1);
+    FT ymax = rect.max_coord(1);
+    FT zmin = rect.min_coord(2);
+    FT zmax = rect.max_coord(2);
+
+    // Print the bounds
+    std::cout << "X Bounds: [" << xmin << ", " << xmax << "]\n";
+    std::cout << "Y Bounds: [" << ymin << ", " << ymax << "]\n";
+    std::cout << "Z Bounds: [" << zmin << ", " << zmax << "]\n";
+}
+
+double euclidean_distance(Point_3 a, Point_3 b) {
+    return sqrt(pow(a.x() - b.x(), 2) + pow(a.y() - b.y(), 2) + pow(a.z() - b.z(), 2));
+}
+
+
+double nearest_point_distance(Point_set &set1, Point_set &set2) {
+    
+    double total_distance = 0;
+    for (Point_set::const_iterator it = set1.begin(); it != set1.end(); it++) {
+        double min_distance = euclidean_distance(set1.point(*it), set2.point(*set2.begin()));
+        for (Point_set::const_iterator jt = set2.begin(); jt != set2.end(); jt++) {
+            double distance = euclidean_distance(set1.point(*it), set2.point(*jt));
+            if (distance < min_distance) {
+                min_distance = distance;
+            }
+        }
+        total_distance += min_distance;
+    }
+    return total_distance / set1.size();
+}
 
 void printBbox(Bbox& inputBox){
     
@@ -104,16 +151,41 @@ void add_cube_to_mesh(Mesh &mesh, double xmin, double xmax, double ymin, double 
 
 }
 
+
+void construct_kd_mesh(const Node* node, const Kd_tree_rectangle& bbox, Mesh &mesh) {
+    if (!node) return;
+
+    if (node -> is_leaf()) {
+        // Process the points in the leaf node
+        const Leaf_node* leaf_node = static_cast<const Leaf_node*>(node);
+    } else {
+        const Internal_node* internal_node = static_cast<const Internal_node*>(node);
+        // print_kd_bounds(bbox);
+        add_cube_to_mesh(mesh, bbox.min_coord(0), bbox.max_coord(0), bbox.min_coord(1), bbox.max_coord(1), bbox.min_coord(2), bbox.max_coord(2));
+        // Split the bounding box
+        Kd_tree_rectangle lower_bbox(bbox);
+        Kd_tree_rectangle upper_bbox(bbox);
+        internal_node->split_bbox(lower_bbox, upper_bbox);
+
+        // Now you can use lower_bbox and upper_bbox for further processing
+
+        // Recursively traverse the child nodes
+        construct_kd_mesh(internal_node->lower(), lower_bbox, mesh);
+        construct_kd_mesh(internal_node->upper(), upper_bbox, mesh);
+    }
+}
+
+
 int main(int argc, char* argv[]){ // cmake -G"Visual Studio 16" -A x64 -DCMAKE_TOOLCHAIN_FILE=C:/Users/matth/Documents/CompGeo/vcpkg/scripts/buildsystems/vcpkg.cmake ..
     // cmake --build .
 
     Point_set points;
-    if (argc < 2)
+    if (argc < 3)
     {
-        std::cerr << "Usage: " << argv[0] << " [input.xyz/off/ply/las]" << std::endl;
-        std::cerr <<"Running " << argv[0] << " data/kitten.xyz -1\n";
+        std::cerr << "Usage: [input.xyz], [bucket size]" << std::endl;
     }
     std::string fileName = argv[1];
+    int bucketSize = std::stoi(argv[2]);
 
     std::ifstream stream (fileName, std::ios_base::binary);
     if (!stream)
@@ -127,18 +199,19 @@ int main(int argc, char* argv[]){ // cmake -G"Visual Studio 16" -A x64 -DCMAKE_T
         return EXIT_FAILURE;
 
 
-	kTree ktree;
 	Point_vector pv;
     Mesh inputMesh;
-
+    Mesh inputKdMesh;
 	for (Point_3 p : points.points()){
         inputMesh.add_vertex(p);
+        inputKdMesh.add_vertex(p);
 	}
 
+	Kd_Tree ktree(points.points().begin(), points.points().end(), bucketSize);
 	CGAL::draw(inputMesh);
 
     Octree octree(points, points.point_map());
-    octree.refine(100000, 1);
+    octree.refine(100000, bucketSize);
     typedef std::array<std::size_t, 3> Facet;
     std::vector<Facet> facets;
     CGAL::advancing_front_surface_reconstruction(points.points().begin(),
@@ -161,4 +234,23 @@ int main(int argc, char* argv[]){ // cmake -G"Visual Studio 16" -A x64 -DCMAKE_T
         //std::cout << node << "\n" << std::endl;
     }
     CGAL::draw(inputMesh);
+
+    // Test point distance
+    Point_set cloud1;
+    cloud1.insert(Point_3(1, 2, 3));
+    cloud1.insert(Point_3(4, 5, 6));
+    cloud1.insert(Point_3(7, 8, 9));
+
+    Point_set cloud2;
+    cloud2.insert(Point_3(1, 2, 3));
+    cloud2.insert(Point_3(4, 5, 6));
+    cloud2.insert(Point_3(7, 8, 10));
+    cloud2.insert(Point_3(1, 2.5, 3));
+    cloud2.insert(Point_3(7, 1, 10));
+
+    double distance = nearest_point_distance(cloud1, cloud2);
+    std::cout << "Point cloud Distance: " << distance << std::endl;
+    // Iterate over kd tree
+    construct_kd_mesh(ktree.root(), ktree.bounding_box(), inputKdMesh);
+    CGAL::draw(inputKdMesh);
 }
